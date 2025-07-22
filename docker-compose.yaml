@@ -2,7 +2,7 @@ networks:
   default:
     driver: bridge
     name: roboshop
-    # external: true  # Uncomment only if network is pre-created
+    external: true  # Uncomment only if network is pre-created
 
 volumes:
   mongodb: #This is equal to docker volume create mogodb
