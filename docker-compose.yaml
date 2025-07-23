@@ -84,7 +84,7 @@ services:
     image: karna0323/frontend:v2
     container_name: frontend
     ports:
-    - "80:80"
+    - "8080:80"
     depends_on:
     - catalogue
     - user
