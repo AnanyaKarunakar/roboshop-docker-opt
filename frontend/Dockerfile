@@ -4,6 +4,11 @@ COPY package.json .
 COPY *.js .
 RUN npm install
 
+FROM nginx:alpine
+COPY build/ /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+
 FROM node:20-alpine3.21
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
 ENV REDIS_HOST="redis" \
