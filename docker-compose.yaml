@@ -2,59 +2,51 @@ networks:
   default:
     driver: bridge
     name: roboshop
-    external: true  # Uncomment only if network is pre-created
-
+    #external: true #I created network already using docker network create roboshop
 volumes:
-  mongodb: #This is equal to docker volume create mogodb
+  mongodb:
   redis:
   mysql:
-  rabbitmq: #This is equal to docker volume create rabbitmq
+  rabbitmq: # docker volume create rabbitmq
 services:
   mongodb:
     image: karna0323/mongodb:v2
     container_name: mongodb
     volumes:
     - mongodb:/data/db
-
   catalogue:
     image: karna0323/catalogue:v2
-    container_name: catalogue  
+    container_name: catalogue
     depends_on:
-      - mongodb
-
+    - mongodb
   redis:
     image: redis:7.0
     container_name: redis
     volumes:
     - redis:/data
-
   user:
     image: karna0323/user:v2
     container_name: user
     depends_on:
-      - redis
-      - mongodb
-
+    - redis
+    - mongodb
   cart:
     image: karna0323/cart:v2
     container_name: cart
     depends_on:
-      - catalogue
-      - redis
-
+    - catalogue
+    - redis
   mysql:
     image: karna0323/mysql:v2
     container_name: mysql
     volumes:
     - mysql:/var/lib/mysql
-
   shipping:
     image: karna0323/shipping:v2
     container_name: shipping
     depends_on:
-      - mysql
-      - cart
-
+    - mysql
+    - cart
   rabbitmq:
     image: rabbitmq:3
     container_name: rabbitmq
@@ -63,9 +55,8 @@ services:
       RABBITMQ_DEFAULT_PASS: roboshop123
     volumes:
     - rabbitmq:/var/lib/rabbitmq
-
   payment:
-    image: karna0323/payment:v2
+    image: joindevops/payment:v1
     container_name: payment
     environment:
       CART_HOST: cart
@@ -79,15 +70,15 @@ services:
     - rabbitmq
     - cart
     - user
-
   frontend:
     image: karna0323/frontend:v2
     container_name: frontend
     ports:
-    - "8080:80"
+    - "80:80"
     depends_on:
     - catalogue
     - user
     - cart
     - shipping
     - payment
+      
